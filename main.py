@@ -78,7 +78,7 @@ def json_to_csv_pandas(json_file, csv_file):
     df = pd.read_json(json_file)
     
     # Write the DataFrame to CSV
-    df.to_csv(csv_file, index=False)
+    df.to_excel(csv_file, index=False)
 
 
 if __name__ == "__main__":
@@ -88,5 +88,5 @@ if __name__ == "__main__":
     combine_json_files('.', 'combined.json')
     print ("completed combine process")
     print ("starting process to convert combined JSON file to csv")
-    json_to_csv_pandas('combined.json', 'output.csv')
+    json_to_csv_pandas('combined.json', 'output.xlsx')
     print ("completed conversion process")
