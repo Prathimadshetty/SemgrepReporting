@@ -25,28 +25,42 @@ jobs:
           pip install pandas openpyxl
 
       - name: create filename for findings file with current time & date-1
-        run: echo "CURRENT_DATE=$(date +'%H-%M--%d-%m-%y')" >> $GITHUB_ENV
-
-      - name: create filename for findings file with current time & date-2
-        run: echo "TEMP_STR=Findings" >> $GITHUB_ENV
-
+        run: |
+          echo "CURRENT_DATE=$(date +'%H-%M--%d-%b-%Y')" >> $GITHUB_ENV
+          echo "TEMP_STR=Findings" >> $GITHUB_ENV
+    
       - name: create filename for findings file with current time & date-3
-        run: echo "FILENAME=$TEMP_STR-$CURRENT_DATE" >> $GITHUB_ENV
+        run: |
+          echo "FILENAME=$TEMP_STR-$CURRENT_DATE.csv" >> $GITHUB_ENV
+          echo "FILENAMEXLSX=$TEMP_STR-$CURRENT_DATE.xlsx" >> $GITHUB_ENV
       
-      - name: Use Date Env Var
+      - name: Troubleshooting 
         run: |
           echo "$CURRENT_DATE"
           echo "$TEMP_STR"
           echo "$FILENAME"
+          echo "$FILENAMEXLSX"
           
       - name: execute py script # run main.py
         env:
           SEMGREP_API_WEB_TOKEN: ${{ secrets.SEMGREP_API_WEB_TOKEN }}
-        run: python main.py
+        run: |
+          python main.py
 
-      - name: Upload findings as Artifact     
+      - name: copy output.csv to $FILENAME.csv & output.xlsx to $FILENAME.xlsx
+        run: |
+          cp output.csv $FILENAME
+          cp output.xlsx $FILENAMEXLSX
+
+      - name: Upload findings as Artifact- CSV     
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.FILENAME }}
-          path: output.xlsx
+          path: ${{ env.FILENAME }}
+          
+      - name: Upload findings as Artifact- XLSX   
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.FILENAMEXLSX }}
+          path: ${{ env.FILENAMEXLSX }}
           
