@@ -2,8 +2,8 @@ name: Write findings to CSV file
 
 on:
   workflow_dispatch: 
-  schedule:
-    - cron: '0 * * * *' # Run every hour at 00 minutes
+#  schedule:
+#    - cron: '0 * * * *' # Run every hour at 00 minutes
 
 jobs:
   build:
